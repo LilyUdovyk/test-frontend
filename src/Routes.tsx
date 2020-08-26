@@ -10,7 +10,7 @@ const CreateUser = React.lazy(() => import("./components/CreateUser"));
 const UserSettings = React.lazy(() => import("./components/UserSettings"));
 
 const Routes: React.FC = () => (
-    <React.Suspense fallback={<div>Загрузка...</div>}>
+    <React.Suspense fallback={<div>Loading...</div>}>
         <Switch>
             <Route exact path='/users' component={UsersList} />  
             <Route exact path='/user-:id' component={UserPage} />  

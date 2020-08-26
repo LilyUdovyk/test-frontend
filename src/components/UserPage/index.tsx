@@ -54,11 +54,11 @@ const UserPage: React.FC<UserPageProps> = props => {
           <p>Role: {props.role}</p>
         </div>
         <div className={style.buttonBlock}>
-          <button>
-            <Link to={`/update-user-${props.id}`}>
+          <Link to={`/update-user-${props.id}`}>
+            <button>
               Update user
-            </Link>
-          </button>
+            </button>
+          </Link>
           <button onClick={() => deleteUserHandler(props.id)}>
             Delete user
           </button>

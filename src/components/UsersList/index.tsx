@@ -40,17 +40,20 @@ const UsersList: React.FC<UsersProps> = props => {
 
   return (
     <div className={style.usersList}>
-      <Link to="/create-user">Create new user</Link>
+      <div className={style.createUser}>
+        <Link to="/create-user" className={style.createUserLink}>
+          <button>+</button>
+        </Link>
+        <p>Create new user</p>
+      </div>
       { props.users.map((user: UserData) => {
         return (
-          <Link to={`/user-${user.id}`}>
             <User 
               key={user.id}
               name={user.name}
               picture={user.picture}
               onClick={() => retrieveUserHandler(user.id)}
             />
-        </Link>
         )
       })}
     </div>

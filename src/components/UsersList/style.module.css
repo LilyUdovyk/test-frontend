@@ -5,3 +5,37 @@
 	justify-content: center;
 	margin: auto;
 }
+.createUser {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 20rem;
+	max-width: 96%;
+	padding: 1rem 2rem;
+	border-radius: 5px;
+	margin-top: 0.5rem;
+}
+
+.createUser button {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background-color: #66676c;
+	border: none;
+	font-size: 2rem;
+	margin-right: 1rem;
+	cursor: pointer;
+}
+
+.createUser button:hover {
+	background-color: #4b4c50;
+}
+
+.createUser button:focus {
+	outline: none;
+}
+
+.createUserLink {
+	text-decoration: none;
+	color: white;
+}
