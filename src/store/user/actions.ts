@@ -1,4 +1,4 @@
-import { createAsyncAction, createAction } from "typesafe-actions";
+import { createAsyncAction } from "typesafe-actions";
 import { UserData, CreateUserCreds } from "../user/types";
 
 export const createUser = createAsyncAction(

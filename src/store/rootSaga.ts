@@ -1,6 +1,6 @@
 import { all, spawn } from "redux-saga/effects";
 import { retrieveUserSaga, createUserSaga, updateUserSaga, deleteUserSaga } from "./user/sagas";
-import { retrieveUsersSaga, ignoreUsersSaga } from "./users/sagas";
+import { retrieveUsersSaga, saveIgnoreUsersSaga, ignoreUserSaga } from "./users/sagas";
 
 export default function* rootSaga() {
   yield all([
@@ -9,6 +9,7 @@ export default function* rootSaga() {
     spawn(retrieveUserSaga),
     spawn(updateUserSaga),
     spawn(deleteUserSaga),
-    spawn(ignoreUsersSaga)
+    spawn(saveIgnoreUsersSaga),
+    spawn(ignoreUserSaga),
   ]);
 }

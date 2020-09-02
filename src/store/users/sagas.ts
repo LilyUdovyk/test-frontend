@@ -1,5 +1,4 @@
 import { take, call, put, putResolve, select } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
 
 import * as actions from './actions'
 import { retrieveUsers, ignoreUsers } from './utils'
@@ -16,16 +15,30 @@ export function* retrieveUsersSaga() {
   }
 }
 
-export function* ignoreUsersSaga() {
+export function* ignoreUserSaga() {
   while (true) {
-    const { payload } = yield take(actions.ignoreUsers.request)
+    const { payload } = yield take(actions.ignoreUser)
+
+    const users = yield select(state => state.users.usersData)
+    const index = users.indexOf(payload);
+    users.splice(index, 1)
+    yield putResolve(actions.retrieveUsers.success(users))
+
+    const ignoredUsers = yield select(state => state.users.ignoreUsersData)
+    const updatedIgnoreList = [...ignoredUsers, payload]
+    yield put(actions.updateIgnoreUsersList(updatedIgnoreList))
+  }
+}
+
+export function* saveIgnoreUsersSaga() {
+  while (true) {
+    const { payload } = yield take(actions.saveIgnoreUsers.request)
     try {
-        const updatedUserData = yield call(ignoreUsers, payload)
-        const updatedUser = updatedUserData.data
-        yield putResolve(actions.ignoreUsers.success(updatedUser))
-        yield put(push(`/user-${updatedUser.id}`))
+        const ignoredUsersData = yield call(ignoreUsers, payload)
+        const ignoredUsers = ignoredUsersData.data
+        yield putResolve(actions.saveIgnoreUsers.success(ignoredUsers))
     } catch (error) {
-        yield put(actions.ignoreUsers.failure(error.message))
+        yield put(actions.saveIgnoreUsers.failure(error.message))
     }
   }
 }

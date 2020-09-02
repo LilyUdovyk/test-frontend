@@ -6,6 +6,7 @@ import * as actions from "./actions";
 const initialState: UsersState = {
     error: null,
     usersData: [],
+    ignoreUsersData: [],
     ignoreUsersIds: []
 }
 
@@ -15,21 +16,26 @@ export default (state: UsersState = initialState, action: UsersAction): UsersSta
             return {
                 ...state,
                 error: null,
-                ignoreUsersIds: [],
                 usersData: action.payload
             }
         case getType(actions.retrieveUsers.failure):
             return {
                 ...state,
                 error: action.payload,
-            }  
-        case getType(actions.ignoreUsers.success):
+            }
+        case getType(actions.updateIgnoreUsersList):
+            return {
+                ...state,
+                error: null,
+                ignoreUsersData: action.payload
+            } 
+        case getType(actions.saveIgnoreUsers.success):
             return {
                 ...state,
                 error: null,
                 ignoreUsersIds: action.payload,
             }
-        case getType(actions.ignoreUsers.failure):
+        case getType(actions.saveIgnoreUsers.failure):
             return {
                 ...state,
                 error: action.payload,

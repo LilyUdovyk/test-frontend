@@ -13,7 +13,8 @@ import style from './style.module.css'
 
 const mapStateToProps = (state: IRootState) =>
   ({
-    users: state.users.usersData
+    users: state.users.usersData,
+    ignoredUsers: state.users.ignoreUsersData
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<IRootAction>) =>
@@ -21,7 +22,8 @@ const mapDispatchToProps = (dispatch: Dispatch<IRootAction>) =>
     {
       retrieveUsers: usersActions.retrieveUsers.request,
       retrieveUser: userActions.retrieveUser.request,
-      saveIgnoreUser: usersActions.ignoreUsers.request
+      saveIgnoreUser: usersActions.saveIgnoreUsers.request,
+      ignoreUser: usersActions.ignoreUser
     },
     dispatch
   );
@@ -34,25 +36,18 @@ const UsersList: React.FC<UsersProps> = props => {
   React.useEffect(() => {
     props.retrieveUsers()
   }, [])
-
-  let defaultIgnoredUsersList: UserData[] = []
-  let usersList = props.users
-
-  const [ignoredUsers, setIgnoredUsers] = React.useState(defaultIgnoredUsersList);
-  
+ 
   const retrieveUserHandler = (userId: string) => {
     props.retrieveUser(userId)
   }
 
   const saveIgnoreUserHandler = () => {
-    let ignoredUsersIds = ignoredUsers.map((user: UserData) => user.id)
+    let ignoredUsersIds = props.ignoredUsers.map((user: UserData) => user.id)
     props.saveIgnoreUser(ignoredUsersIds)
   }
 
   const ignoreUserHandler = (user: UserData) => {
-    const index = usersList.indexOf(user);
-    usersList.splice(index, 1)
-    setIgnoredUsers([...ignoredUsers, user])
+    props.ignoreUser(user)
   }
 
   return (
@@ -63,10 +58,10 @@ const UsersList: React.FC<UsersProps> = props => {
         </Link>
         <p>Create new user</p>
       </div>
-      { ignoredUsers.length !==0 &&
+      { props.ignoredUsers.length !==0 &&
         <div className={style.ignoredUsers}>
           <h4> Ignored users </h4>       
-          { ignoredUsers.map((user: UserData) => {
+          { props.ignoredUsers.map((user: UserData) => {
             return (
                 <User 
                   key={user.id}
@@ -79,9 +74,9 @@ const UsersList: React.FC<UsersProps> = props => {
           <button onClick={() => saveIgnoreUserHandler()}>Save</button>
         </div>
       }
-      { usersList.map((user: UserData) => {
+      { props.users.map((user: UserData) => {
         return (
-          <>
+          <div className={style.userBlock}>
             <User 
               key={user.id}
               name={user.name}
@@ -89,10 +84,10 @@ const UsersList: React.FC<UsersProps> = props => {
               onClick={() => retrieveUserHandler(user.id)}
             />
             <button onClick={() => ignoreUserHandler(user)}>Ignore</button>
-          </>
+          </div>
         )
       })}
     </div>
   );
 };
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(UsersList));
+export default connect(mapStateToProps, mapDispatchToProps)(UsersList);
