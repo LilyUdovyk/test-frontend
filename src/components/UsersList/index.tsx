@@ -20,7 +20,8 @@ const mapDispatchToProps = (dispatch: Dispatch<IRootAction>) =>
   bindActionCreators(
     {
       retrieveUsers: usersActions.retrieveUsers.request,
-      retrieveUser: userActions.retrieveUser.request
+      retrieveUser: userActions.retrieveUser.request,
+      saveIgnoreUser: usersActions.ignoreUsers.request
     },
     dispatch
   );
@@ -29,13 +30,29 @@ type UsersProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>
 
 const UsersList: React.FC<UsersProps> = props => {
-  
+
   React.useEffect(() => {
-		props.retrieveUsers()
+    props.retrieveUsers()
   }, [])
+
+  let defaultIgnoredUsersList: UserData[] = []
+  let usersList = props.users
+
+  const [ignoredUsers, setIgnoredUsers] = React.useState(defaultIgnoredUsersList);
   
   const retrieveUserHandler = (userId: string) => {
     props.retrieveUser(userId)
+  }
+
+  const saveIgnoreUserHandler = () => {
+    let ignoredUsersIds = ignoredUsers.map((user: UserData) => user.id)
+    props.saveIgnoreUser(ignoredUsersIds)
+  }
+
+  const ignoreUserHandler = (user: UserData) => {
+    const index = usersList.indexOf(user);
+    usersList.splice(index, 1)
+    setIgnoredUsers([...ignoredUsers, user])
   }
 
   return (
@@ -46,14 +63,33 @@ const UsersList: React.FC<UsersProps> = props => {
         </Link>
         <p>Create new user</p>
       </div>
-      { props.users.map((user: UserData) => {
+      { ignoredUsers.length !==0 &&
+        <div className={style.ignoredUsers}>
+          <h4> Ignored users </h4>       
+          { ignoredUsers.map((user: UserData) => {
+            return (
+                <User 
+                  key={user.id}
+                  name={user.name}
+                  picture={user.picture}
+                  onClick={() => retrieveUserHandler(user.id)}
+                />
+            )
+          })} 
+          <button onClick={() => saveIgnoreUserHandler()}>Save</button>
+        </div>
+      }
+      { usersList.map((user: UserData) => {
         return (
+          <>
             <User 
               key={user.id}
               name={user.name}
               picture={user.picture}
               onClick={() => retrieveUserHandler(user.id)}
             />
+            <button onClick={() => ignoreUserHandler(user)}>Ignore</button>
+          </>
         )
       })}
     </div>

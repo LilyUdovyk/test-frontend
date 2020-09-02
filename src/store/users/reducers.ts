@@ -5,7 +5,8 @@ import * as actions from "./actions";
 
 const initialState: UsersState = {
     error: null,
-    usersData: []
+    usersData: [],
+    ignoreUsersIds: []
 }
 
 export default (state: UsersState = initialState, action: UsersAction): UsersState => {
@@ -14,9 +15,21 @@ export default (state: UsersState = initialState, action: UsersAction): UsersSta
             return {
                 ...state,
                 error: null,
+                ignoreUsersIds: [],
                 usersData: action.payload
             }
         case getType(actions.retrieveUsers.failure):
+            return {
+                ...state,
+                error: action.payload,
+            }  
+        case getType(actions.ignoreUsers.success):
+            return {
+                ...state,
+                error: null,
+                ignoreUsersIds: action.payload,
+            }
+        case getType(actions.ignoreUsers.failure):
             return {
                 ...state,
                 error: action.payload,

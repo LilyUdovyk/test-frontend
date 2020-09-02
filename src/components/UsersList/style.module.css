@@ -39,3 +39,7 @@
 	text-decoration: none;
 	color: white;
 }
+
+.ignoredUsers {
+	border: 1px solid black
+}

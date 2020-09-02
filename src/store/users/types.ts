@@ -6,5 +6,6 @@ export type UsersAction = ActionType<typeof actions>
 
 export interface UsersState {
     readonly usersData: UserData[]
+    readonly ignoreUsersIds: UserData[]
     readonly error: string | null
 }
